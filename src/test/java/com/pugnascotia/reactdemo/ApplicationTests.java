@@ -1,4 +1,4 @@
-package com.pugnascotia.reactdemo;
+package com.dahlke.reactdemo;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;

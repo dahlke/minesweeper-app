@@ -1,4 +1,4 @@
-package com.pugnascotia.reactdemo.account;
+package com.dahlke.reactdemo.account;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -6,7 +6,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import static com.pugnascotia.reactdemo.utils.State.populateModel;
+import static com.dahlke.reactdemo.utils.State.populateModel;
 
 /**
  * Handles a request for the signin page and renders the

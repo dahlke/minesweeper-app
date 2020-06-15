@@ -1,4 +1,4 @@
-package com.pugnascotia.reactdemo.utils;
+package com.dahlke.reactdemo.utils;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;

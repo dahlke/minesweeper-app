@@ -1,16 +1,16 @@
-package com.pugnascotia.reactdemo.home;
+package com.dahlke.reactdemo.home;
 
 import java.util.HashMap;
 import java.util.Map;
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 
-import com.pugnascotia.reactdemo.comments.CommentRepository;
+import com.dahlke.reactdemo.comments.CommentRepository;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import static com.pugnascotia.reactdemo.utils.State.populateModel;
+import static com.dahlke.reactdemo.utils.State.populateModel;
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
 
 /**

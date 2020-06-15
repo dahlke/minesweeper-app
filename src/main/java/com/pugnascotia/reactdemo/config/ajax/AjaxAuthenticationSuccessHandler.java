@@ -1,4 +1,4 @@
-package com.pugnascotia.reactdemo.config.ajax;
+package com.dahlke.reactdemo.config.ajax;
 
 import java.io.IOException;
 import javax.inject.Inject;
@@ -11,8 +11,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
-import com.pugnascotia.reactdemo.utils.Cookies;
-import com.pugnascotia.reactdemo.utils.State;
+import com.dahlke.reactdemo.utils.Cookies;
+import com.dahlke.reactdemo.utils.State;
 
 /**
  * A handler that returns HTTP 200 OK for successful AJAX authentications,

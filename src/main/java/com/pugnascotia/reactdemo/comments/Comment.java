@@ -1,4 +1,4 @@
-package com.pugnascotia.reactdemo.comments;
+package com.dahlke.reactdemo.comments;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;

@@ -1,4 +1,4 @@
-package com.pugnascotia.reactdemo;
+package com.dahlke.reactdemo;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

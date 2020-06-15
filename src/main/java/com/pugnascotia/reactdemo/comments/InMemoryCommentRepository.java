@@ -1,4 +1,4 @@
-package com.pugnascotia.reactdemo.comments;
+package com.dahlke.reactdemo.comments;
 
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;

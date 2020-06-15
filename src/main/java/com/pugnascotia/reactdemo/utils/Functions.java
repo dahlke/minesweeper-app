@@ -1,11 +1,11 @@
-package com.pugnascotia.reactdemo.utils;
+package com.dahlke.reactdemo.utils;
 
 import java.util.List;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static com.pugnascotia.reactdemo.utils.Streams.asStream;
+import static com.dahlke.reactdemo.utils.Streams.asStream;
 
 /**
  * Utility methods for making it easier to map over a Java list.

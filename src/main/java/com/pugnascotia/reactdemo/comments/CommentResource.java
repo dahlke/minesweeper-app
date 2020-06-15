@@ -1,9 +1,9 @@
-package com.pugnascotia.reactdemo.comments;
+package com.dahlke.reactdemo.comments;
 
 import java.util.List;
 import javax.inject.Inject;
 
-import com.pugnascotia.reactdemo.utils.Functions;
+import com.dahlke.reactdemo.utils.Functions;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;

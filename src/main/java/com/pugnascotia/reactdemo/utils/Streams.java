@@ -1,4 +1,4 @@
-package com.pugnascotia.reactdemo.utils;
+package com.dahlke.reactdemo.utils;
 
 import java.util.Spliterator;
 import java.util.stream.Stream;

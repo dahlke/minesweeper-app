@@ -1,4 +1,4 @@
-package com.pugnascotia.reactdemo.config.ajax;
+package com.dahlke.reactdemo.config.ajax;
 
 import java.io.IOException;
 import javax.servlet.ServletException;

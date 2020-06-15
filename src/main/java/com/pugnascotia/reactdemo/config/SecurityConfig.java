@@ -1,8 +1,8 @@
-package com.pugnascotia.reactdemo.config;
+package com.dahlke.reactdemo.config;
 
 import javax.inject.Inject;
 
-import com.pugnascotia.reactdemo.config.ajax.AjaxAuthenticationSuccessHandler;
+import com.dahlke.reactdemo.config.ajax.AjaxAuthenticationSuccessHandler;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -12,8 +12,8 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.web.csrf.CsrfFilter;
 import org.springframework.security.web.csrf.CsrfTokenRepository;
 import org.springframework.security.web.csrf.HttpSessionCsrfTokenRepository;
-import com.pugnascotia.reactdemo.config.ajax.AjaxAuthenticationFailureHandler;
-import com.pugnascotia.reactdemo.config.ajax.AjaxLogoutSuccessHandler;
+import com.dahlke.reactdemo.config.ajax.AjaxAuthenticationFailureHandler;
+import com.dahlke.reactdemo.config.ajax.AjaxLogoutSuccessHandler;
 
 @Configuration
 @EnableWebSecurity

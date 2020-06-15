@@ -1,4 +1,4 @@
-package com.pugnascotia.reactdemo.config;
+package com.dahlke.reactdemo.config;
 
 import java.io.IOException;
 import javax.servlet.FilterChain;
@@ -7,7 +7,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.web.filter.OncePerRequestFilter;
-import com.pugnascotia.reactdemo.utils.Cookies;
+import com.dahlke.reactdemo.utils.Cookies;
 
 /**
  * This filter ensures that if a request does not supply a CSRF token in a cookie,

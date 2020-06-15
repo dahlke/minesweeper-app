@@ -1,4 +1,4 @@
-package com.pugnascotia.reactdemo.utils;
+package com.dahlke.reactdemo.utils;
 
 import java.util.Collections;
 import java.util.HashMap;

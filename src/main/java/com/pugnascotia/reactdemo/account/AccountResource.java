@@ -1,11 +1,11 @@
-package com.pugnascotia.reactdemo.account;
+package com.dahlke.reactdemo.account;
 
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
-import com.pugnascotia.reactdemo.config.ajax.AjaxLogoutSuccessHandler;
-import com.pugnascotia.reactdemo.utils.State;
+import com.dahlke.reactdemo.config.ajax.AjaxLogoutSuccessHandler;
+import com.dahlke.reactdemo.utils.State;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 

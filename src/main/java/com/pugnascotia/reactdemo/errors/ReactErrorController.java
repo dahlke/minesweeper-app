@@ -1,11 +1,11 @@
-package com.pugnascotia.reactdemo.errors;
+package com.dahlke.reactdemo.errors;
 
 import java.util.Map;
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.pugnascotia.reactdemo.utils.State;
+import com.dahlke.reactdemo.utils.State;
 import org.springframework.boot.autoconfigure.web.AbstractErrorController;
 import org.springframework.boot.autoconfigure.web.ErrorAttributes;
 import org.springframework.boot.autoconfigure.web.ErrorProperties;
