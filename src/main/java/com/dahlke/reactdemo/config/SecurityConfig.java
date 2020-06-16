@@ -55,10 +55,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 		http
-			.csrf().disable();
-			/*
+			.csrf().disable()
 			.authorizeRequests()
-				.antMatchers("/", "/signin", "/api/account", "/api/comments", "/api", "/game").permitAll()
+				.antMatchers("/", "/signin", "/api/account", "/api/comments", "/api/game").permitAll()
 				.anyRequest().authenticated()
 				.and()
 			.formLogin()
@@ -72,7 +71,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 				.logoutUrl("/api/signout")
 				.logoutSuccessHandler(logoutSuccessHandler)
 				.permitAll();
-			*/
 	}
 
 }
