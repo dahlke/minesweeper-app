@@ -3,7 +3,6 @@ package com.dahlke.reactdemo.game;
 import java.util.List;
 import javax.inject.Inject;
 import java.net.*;
-import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 
 import org.json.JSONObject;
@@ -19,7 +18,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.http.HttpMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.http.ResponseEntity;
 import org.springframework.http.HttpEntity;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.http.HttpHeaders;
@@ -53,6 +51,8 @@ public class GameBoardResource {
 		@RequestParam(name="cols", defaultValue="10", required=false) Integer cols,
 		@RequestParam(name="mines", defaultValue="20", required=false) Integer mines
 	) throws IOException {
+		// curl -i -X POST '127.0.0.1:8080/api/game' -d name=test -d rows=10 -d cols=10 -d mines=20
+
 		RestTemplate restTemplate = new RestTemplate();
 		String gameUrl = "http://localhost:3000/game";
 
@@ -65,10 +65,57 @@ public class GameBoardResource {
 		gameRequestJson.put("cols", cols);
 		gameRequestJson.put("mines", mines);
 
-		// curl -i -X POST '127.0.0.1:8080/api/game' -d '{"name": "teste", "rows": 10, "cols": 8, "mines": 20}'
-		// curl -i -X POST '127.0.0.1:8080/api/game' -d name=test -d rows=10 -d cols=10 -d mines=20
 
-		System.out.println(gameRequestJson.toString());
+		HttpEntity<String> request = new HttpEntity<String>(gameRequestJson.toString(), headers);
+		String gameBoardAsString = restTemplate.postForObject(gameUrl, request, String.class);
+		JsonNode root = objectMapper.readTree(gameBoardAsString);
+		JsonNode result = root.path("result");
+		return result.toString();
+	}
+
+	@RequestMapping(path = "/start", method = POST)
+	@ResponseBody
+	//consumes = "application/json", produces = "application/json"
+	public String start(@RequestParam(name="name") String name) throws IOException {
+		// curl -i -X POST '127.0.0.1:8080/api/start' -d name=test
+
+		RestTemplate restTemplate = new RestTemplate();
+		String gameUrl = String.format("http://localhost:3000/game/%s/start", name);
+
+		HttpHeaders headers = new HttpHeaders();
+		headers.setContentType(APPLICATION_JSON);
+		System.out.println(gameUrl);
+
+		HttpEntity<String> request = new HttpEntity<String>(null, headers);
+		String gameBoardAsString = restTemplate.postForObject(gameUrl, request, String.class);
+		JsonNode root = objectMapper.readTree(gameBoardAsString);
+		JsonNode result = root.path("result");
+		return result.toString();
+	}
+
+	@RequestMapping(path = "/click", method = POST)
+	@ResponseBody
+	//consumes = "application/json", produces = "application/json"
+	public String game(
+		@RequestParam(name="name") String name,
+		@RequestParam(name="x") Integer x,
+		@RequestParam(name="y") Integer y
+	) throws IOException {
+		// curl -i -X POST '127.0.0.1:8080/api/click' -d name=test -d x=10 -d y=10
+
+		RestTemplate restTemplate = new RestTemplate();
+		String gameUrl = String.format("http://localhost:3000/game/%s/click", name);
+		System.out.println(gameUrl);
+
+		HttpHeaders headers = new HttpHeaders();
+		headers.setContentType(APPLICATION_JSON);
+
+		JSONObject gameRequestJson = new JSONObject();
+		gameRequestJson.put("col", x);
+		gameRequestJson.put("row", y);
+
+
+		System.out.println(gameUrl);
 		HttpEntity<String> request = new HttpEntity<String>(gameRequestJson.toString(), headers);
 		String gameBoardAsString = restTemplate.postForObject(gameUrl, request, String.class);
 		JsonNode root = objectMapper.readTree(gameBoardAsString);
