@@ -10,3 +10,6 @@ server.compression.mime-types:
     - text/xml
     - text/plain
     - text/css
+
+
+security.enable.csrf: false

@@ -65,6 +65,9 @@ class Navigation extends React.Component<Props> {
   }
 
   render() {
+    // <li>{this.authLink()}</li>
+    // <li><Link to="/add">Add Comment</Link></li>
+
     return (
       <nav className="navbar navbar-inverse">
         <div className="container">
@@ -88,8 +91,6 @@ class Navigation extends React.Component<Props> {
             <ul className="nav navbar-nav">
               {this.adminMenu()}
               <li><Link to="/">Home</Link></li>
-              <li><Link to="/add">Add Comment</Link></li>
-              <li>{this.authLink()}</li>
             </ul>
           </div>
         </div>

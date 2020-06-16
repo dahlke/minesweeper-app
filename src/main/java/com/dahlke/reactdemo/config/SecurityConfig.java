@@ -9,8 +9,6 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.web.csrf.CsrfFilter;
-import org.springframework.security.web.csrf.CsrfTokenRepository;
 import org.springframework.security.web.csrf.HttpSessionCsrfTokenRepository;
 import com.dahlke.reactdemo.config.ajax.AjaxAuthenticationFailureHandler;
 import com.dahlke.reactdemo.config.ajax.AjaxLogoutSuccessHandler;
@@ -57,8 +55,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 		http
+			.csrf().disable();
+			/*
 			.authorizeRequests()
-				.antMatchers("/", "/signin", "/api/account", "/api/comments").permitAll()
+				.antMatchers("/", "/signin", "/api/account", "/api/comments", "/api", "/game").permitAll()
 				.anyRequest().authenticated()
 				.and()
 			.formLogin()
@@ -68,22 +68,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 				.failureHandler(authFailureHandler)
 				.permitAll()
 			.and()
-				.addFilterAfter(new CsrfHeaderFilter(), CsrfFilter.class)
-				.csrf().csrfTokenRepository(csrfTokenRepository())
-			.and()
 				.logout()
 				.logoutUrl("/api/signout")
 				.logoutSuccessHandler(logoutSuccessHandler)
 				.permitAll();
+			*/
 	}
 
-	/**
-	 * Change the standard CSRF token header name to match what the front-end code expects.
-	 * See also {@link CsrfHeaderFilter}.
-	 */
-	private static CsrfTokenRepository csrfTokenRepository() {
-		HttpSessionCsrfTokenRepository repository = new HttpSessionCsrfTokenRepository();
-		repository.setHeaderName("X-XSRF-TOKEN");
-		return repository;
-	}
 }
