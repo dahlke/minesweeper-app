@@ -10,6 +10,7 @@ type Props = {
   status: String,
   gameBoard: GameBoardType,
   gameBoardLatestData: Map,
+  lastClicked: Map,
   createGameBoard: () => void,
   clickGameCell: () => void
 };
@@ -23,7 +24,8 @@ class GameBoard extends React.Component<Props> {
       inputRows: 10, 
       inputCols: 10, 
       inputMines: 20,
-      localGameBoard: []
+      localGameBoard: [],
+      gameStatus: "playing"
     };
 
     this.handleRowsChange = this.handleRowsChange.bind(this);
@@ -34,18 +36,15 @@ class GameBoard extends React.Component<Props> {
   }
 
   componentDidUpdate(prevProps) {
-    // TODO: do this as well if there is an update to gameBoardLatestData
-    console.log("update", prevProps.gameBoard, this.props.gameBoard);
-    if (prevProps.gameBoard) {
-      console.log(prevProps.gameBoard);
-      console.log(this.props.gameBoard);
-    }
-    if (
-      (!prevProps.gameBoard || this.props.gameBoard.name !== prevProps.gameBoard.name) ||
-      (prevProps.gameBoardLatestData != this.props.gameBoardLatestData)
-    ) {
-      console.log("game board changed");
+    // If there was no gameboard previously and there is one now, or if they have 
+    // different names signalling a new game, then compute the local game board data.
+    if ((!prevProps.gameBoard && this.props.gameBoard) || (prevProps.gameBoard && this.props.gameBoard.name !== prevProps.gameBoard.name)) {
+      // TODO: if it's a new game, the local board
       this._computeLocalGameBoardData()
+    }
+
+    if (prevProps.gameBoardLatestData !== this.props.gameBoardLatestData) {
+      this._updateLocalGameBoardData()
     }
   }
 
@@ -58,25 +57,22 @@ class GameBoard extends React.Component<Props> {
   _computeLocalGameBoardData() {
     const rows = [];
 
-    console.log("compute local data");
-    if (this.props.gameBoard) {
-      const height = this.props.gameBoard.rows;
-      const width = this.props.gameBoard.cols;
+    const height = this.props.gameBoard.rows;
+    const width = this.props.gameBoard.cols;
 
-      var row;
-      for (row = 0; row < height; row++) {
-        var col;
-        const cols = [];
-        for (col = 0; col < width; col++) {
-          const cellData = {
-            mine: false,
-            clicked: false,
-            value: ""
-          };
-          cols.push(cellData)
-        }
-        rows.push(cols);
+    var row;
+    for (row = 0; row < height; row++) {
+      var col;
+      const cols = [];
+      for (col = 0; col < width; col++) {
+        const cellData = {
+          mine: false,
+          clicked: false,
+          value: ""
+        };
+        cols.push(cellData)
       }
+      rows.push(cols);
     }
 
     this.setState({
@@ -84,21 +80,53 @@ class GameBoard extends React.Component<Props> {
     });
   }
 
+  _updateLocalGameBoardData() {
+    let localGameBoard = this.state.localGameBoard.concat([])
+    let gameStatus = this.state.gameStatus;
+
+    if (this.props.lastClicked) {
+      localGameBoard[this.props.lastClicked.row][this.props.lastClicked.col] = this.props.gameBoardLatestData.Cell;
+      localGameBoard[this.props.lastClicked.row][this.props.lastClicked.col] = this.props.gameBoardLatestData.Cell;
+
+      if (this.props.gameBoardLatestData.Cell.mine) {
+        console.log("HIT THE MINE!", this.props.gameBoardLatestData.Game.grid)
+        localGameBoard = this.props.gameBoardLatestData.Game.grid;
+        gameStatus = "over";
+      }
+    }
+
+    this.setState({
+      localGameBoard: localGameBoard,
+      gameStatus: gameStatus
+    });
+  }
+
   _getGameBoardRows() {
     const rows = [];
 
-    if (this.props.gameBoard) {
+    if (this.props.gameBoard && this.state.localGameBoard.length > 0) {
       // TODO: manage changes
-      console.log("build board ui", this.props.gameBoard, this.props.gameBoardLatestData);
       const height = this.props.gameBoard.rows;
       const width = this.props.gameBoard.cols;
+      const isGameOver = this.state.gameStatus === "over";
 
       var row;
       for (row = 0; row < height; row++) {
         var col;
         const cols = [];
         for (col = 0; col < width; col++) {
-          cols.push(<div className="game-cell" data-col={col} data-row={row} key={`cell-${row}-${col}`} onClick={this.clickCell} />)
+          const cellData = this.state.localGameBoard[row][col];
+          const isClicked = cellData.clicked;
+          const isMine = cellData.mine;
+          const cellValue = isClicked || isGameOver ? (isMine ? "*" : cellData.value) : "";
+
+          cols.push(
+            <div className={`game-cell ${isClicked ? "clicked" : "" } `} data-col={col} data-row={row} key={`cell-${row}-${col}`} onClick={this.clickCell}>
+              <span>
+                {cellValue}
+              </span>
+            </div>
+          )
         }
         rows.push(
           <div key={`row-${row}`} className="game-row">
@@ -157,7 +185,8 @@ class GameBoard extends React.Component<Props> {
 function mapStateToProps(state) {
   return {
     gameBoard: state.game.gameBoard,
-    gameBoardLatestData: state.game.gameBoardLatestData
+    gameBoardLatestData: state.game.gameBoardLatestData,
+    lastClicked: state.game.lastClicked
   };
 }
 

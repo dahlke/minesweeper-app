@@ -23,23 +23,19 @@ export type GameCellClickResp = {
     rows: int,
     cols: int,
     mines: int,
-    /*
-    grid: {
-        [
-          mine: bool,
-          clicked: bool,
-          value: int
-        ]
-    }
-    */
+  },
+  click: {
+    row: int,
+    col: int
   }
 };
 
 
 type State = {
-  status: 'new' | 'playing',
+  status: 'new' | 'playing' | 'pending' | 'over',
   gameBoard: GameBoard,
-  gameBoardLatestData: {}
+  gameBoardLatestData: {},
+  lastClicked: {}
 }
 
 type GameBoardCreatedAction = {
@@ -69,7 +65,11 @@ export default function reducer(state : State = defaultState, action : Action) :
       return {
         status: 'playing',
         gameBoard: state.gameBoard,
-        gameBoardLatestData: action.payload
+        gameBoardLatestData: action.payload,
+        lastClicked: {
+          row: action.row,
+          col: action.col
+        }
       };
     default:
       return state;
@@ -105,10 +105,15 @@ export function createGameBoard(inputRows, inputCols, inputMines) : Thunk<GameBo
 }
 
 // Game Cell Click Functions
-export function gameCellClicked(gameCellClickResp : GameCellClickResp) : GameCellClickedAction {
+export function gameCellClicked(gameCellClickResp: GameCellClickResp, row: int, col: int) : GameCellClickedAction {
+  if (gameCellClickResp.Cell.mine) {
+    console.log("GAME_CELL_CLICKED", gameCellClickResp.Game.grid)
+  }
   return {
     type: 'GAME_CELL_CLICKED',
-    payload: gameCellClickResp
+    payload: gameCellClickResp,
+    row: row,
+    col: col
   };
 }
 
@@ -122,7 +127,7 @@ export function clickGameCell(gameName, row, col) : Thunk<GameCellClickedAction>
   return dispatch => {
       axios.post('/api/click', params)
       .then(
-        (success: { data: GameCellClickResp }) => dispatch(gameCellClicked(success.data)),
+        (success: { data: GameCellClickResp }) => dispatch(gameCellClicked(success.data, row, col)),
         // TODO: something more helpful with this failure
         failure => console.log(failure)
       );
