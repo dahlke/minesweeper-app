@@ -37,7 +37,7 @@ export type GameCellClickResp = {
 
 
 type State = {
-  status: 'started' | 'over',
+  status: 'new' | 'playing',
   gameBoard: GameBoard,
   gameBoardLatestData: {}
 }
@@ -61,13 +61,13 @@ export default function reducer(state : State = defaultState, action : Action) :
   switch (action.type) {
     case 'GAME_BOARD_CREATED':
       return {
-        status: 'started',
+        status: 'new',
         gameBoard: action.payload
       };
 
     case 'GAME_CELL_CLICKED':
       return {
-        status: state.status,
+        status: 'playing',
         gameBoard: state.gameBoard,
         gameBoardLatestData: action.payload
       };
@@ -84,9 +84,11 @@ export function gameBoardCreated(gameBoard : GameBoard) : GameBoardCreatedAction
   };
 }
 
-export function createGameBoard(inputName, inputRows, inputCols, inputMines) : Thunk<GameBoardCreatedAction> {
+export function createGameBoard(inputRows, inputCols, inputMines) : Thunk<GameBoardCreatedAction> {
+  const timestampName = new Date().getTime();
+
   const params = { 
-    name: inputName, 
+    name: timestampName, 
     rows: inputRows, 
     cols: inputCols, 
     mines: inputMines 

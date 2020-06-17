@@ -20,19 +20,33 @@ class GameBoard extends React.Component<Props> {
     super(props);
 
     this.state = {
-      inputName: "", 
       inputRows: 10, 
       inputCols: 10, 
-      inputMines: 20
+      inputMines: 20,
+      localGameBoard: []
     };
 
-    this.handleNameChange = this.handleNameChange.bind(this);
     this.handleRowsChange = this.handleRowsChange.bind(this);
     this.handleColsChange = this.handleColsChange.bind(this);
     this.handleMinesChange = this.handleMinesChange.bind(this);
     this.handleCreateGameBoard = this.handleCreateGameBoard.bind(this);
     this.clickCell = this.clickCell.bind(this);
+  }
 
+  componentDidUpdate(prevProps) {
+    // TODO: do this as well if there is an update to gameBoardLatestData
+    console.log("update", prevProps.gameBoard, this.props.gameBoard);
+    if (prevProps.gameBoard) {
+      console.log(prevProps.gameBoard);
+      console.log(this.props.gameBoard);
+    }
+    if (
+      (!prevProps.gameBoard || this.props.gameBoard.name !== prevProps.gameBoard.name) ||
+      (prevProps.gameBoardLatestData != this.props.gameBoardLatestData)
+    ) {
+      console.log("game board changed");
+      this._computeLocalGameBoardData()
+    }
   }
 
   clickCell(event, data) {
@@ -41,23 +55,53 @@ class GameBoard extends React.Component<Props> {
       this.props.clickGameCell(this.props.gameBoard.name, row, col);
   }
 
-  _getGameBoardRows() {
+  _computeLocalGameBoardData() {
     const rows = [];
-    console.log("build board", this.props.gameBoard, this.props.gameBoardLatestData);
+
+    console.log("compute local data");
     if (this.props.gameBoard) {
       const height = this.props.gameBoard.rows;
       const width = this.props.gameBoard.cols;
 
-      var i;
-      for (i = 0; i < height; i++) {
-        var j;
+      var row;
+      for (row = 0; row < height; row++) {
+        var col;
         const cols = [];
-        for (j = 0; j < width; j++) {
-          
-          cols.push(<div className="game-cell" data-col={j} data-row={i} key={`cell-${i}-${j}`} onClick={this.clickCell} />)
+        for (col = 0; col < width; col++) {
+          const cellData = {
+            mine: false,
+            clicked: false,
+            value: ""
+          };
+          cols.push(cellData)
+        }
+        rows.push(cols);
+      }
+    }
+
+    this.setState({
+      localGameBoard: rows
+    });
+  }
+
+  _getGameBoardRows() {
+    const rows = [];
+
+    if (this.props.gameBoard) {
+      // TODO: manage changes
+      console.log("build board ui", this.props.gameBoard, this.props.gameBoardLatestData);
+      const height = this.props.gameBoard.rows;
+      const width = this.props.gameBoard.cols;
+
+      var row;
+      for (row = 0; row < height; row++) {
+        var col;
+        const cols = [];
+        for (col = 0; col < width; col++) {
+          cols.push(<div className="game-cell" data-col={col} data-row={row} key={`cell-${row}-${col}`} onClick={this.clickCell} />)
         }
         rows.push(
-          <div key={`row-${i}`} className="game-row">
+          <div key={`row-${row}`} className="game-row">
             {cols}
           </div>
         );
@@ -65,10 +109,6 @@ class GameBoard extends React.Component<Props> {
     }
 
     return rows;
-  }
-
-  handleNameChange(event) {
-    this.setState({inputName: event.target.value});
   }
 
   handleRowsChange(event) {
@@ -85,7 +125,7 @@ class GameBoard extends React.Component<Props> {
 
   handleCreateGameBoard(event) {
     event.preventDefault();
-    this.props.createGameBoard(this.state.inputName, this.state.inputMines, this.state.inputCols, this.state.inputMines);
+    this.props.createGameBoard(this.state.inputMines, this.state.inputCols, this.state.inputMines);
   }
 
   render() {
@@ -95,10 +135,6 @@ class GameBoard extends React.Component<Props> {
       <div key="game-board" className="game-board">
         {rows}
         <form onSubmit={this.handleCreateGameBoard}>
-            <label>
-              Name:
-              <input type="text" value={this.state.inputName} onChange={this.handleNameChange} />
-            </label>
             <label>
               Rows:
               <input type="text" value={this.state.inputRows} onChange={this.handleRowsChange} />
@@ -119,7 +155,6 @@ class GameBoard extends React.Component<Props> {
 }
 
 function mapStateToProps(state) {
-  console.log(state.game.gameBoardLatestData);
   return {
     gameBoard: state.game.gameBoard,
     gameBoardLatestData: state.game.gameBoardLatestData
