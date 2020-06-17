@@ -3,52 +3,42 @@
 import axios from 'axios';
 import type { Thunk } from '../';
 
-export type GameCellClick = {
-    x: int,
-    y: int
-};
-
-export type GameCell = {
-  mine: bool,
-  clicked: bool,
-  value: string
-};
-
-export type GameRow = {
-  cells: GameCell[]
-};
-
 export type GameBoard = {
-  rows: GameRow[]
+  name: string,
+  status: string,
+  rows: int,
+  cols: int,
+  mines: int
 };
 
 type State = {
-  status: 'new' | 'started',
+  status: 'new' | 'started' | 'over',
   gameBoard: GameBoard
 }
 
-type ClickCellAction = {
-  type: 'CLICK_CELL',
-  payload: GameCellClick
+type GameBoardCreatedAction = {
+  type: 'GAME_BOARD_CREATED', payload: Comment[]
 };
 
-type GameBoardRefreshedAction = {
-  type: 'GAME_BOARD_REFRESHED', payload: Comment[]
-};
-
-type Action = ClickCellAction | GameBoardRefreshedAction;
+type Action = GameBoardCreatedAction;
 
 const defaultState : State = {
   status: 'pending',
   data: []
 };
 
+/*
+curl -i -X POST '127.0.0.1:8080/api/game' -d name=fub -d rows=10 -d cols=10 -d mines=20
+curl -i -X POST '127.0.0.1:8080/api/start' -d name=fub
+curl -i -X POST '127.0.0.1:8080/api/click' -d name=fub -d x=1 -d y=1
+*/
+
 export default function reducer(state : State = defaultState, action : Action) : State {
   switch (action.type) {
-    case 'GAME_BOARD_REFRESHED':
+    case 'GAME_BOARD_CREATED':
       return {
-        status: 'loaded',
-        data: action.payload
+        status: 'new',
+        gameBoard: action.payload
       };
 
     default:
@@ -56,36 +46,27 @@ export default function reducer(state : State = defaultState, action : Action) :
   }
 }
 
-export function cellClicked(gameBoard : GameBoard) : ClickCellAction {
+export function gameBoardCreated(gameBoard : GameBoard) : GameBoardCreatedAction {
+  console.log("game board created", gameBoard);
   return {
-    type: 'CELL_CLICKED',
-    payload: cellClick
+    type: 'GAME_BOARD_CREATED',
+    payload: gameBoard
   };
 }
 
-export function clickCell(author : string, content : string) : Thunk<ClickCellAction> {
+export function createGameBoard(inputName, inputRows, inputCols, inputMines) : Thunk<GameBoardCreatedAction> {
+  const params = { 
+    name: inputName, 
+    rows: inputRows, 
+    cols: inputCols, 
+    mines: inputMines 
+  }
+  console.log("axios create game board", params);
+
   return dispatch => {
-    axios.post('/api/click-cell', { author, content })
+      axios.post('/api/game', params)
       .then(
-        (success: { data: GameBoard }) => dispatch(cellClicked(success.data)),
-        // TODO: something more helpful with this failure
-        failure => console.error(failure)
-      );
-  };
-}
-
-export function gameBoardRefreshed(comments : Comment[]) : GameBoardRefreshedAction {
-  return {
-    type: 'GAME_BOARD_REFRESHED',
-    payload: comments
-  };
-}
-
-export function refreshGameBoard() : Thunk<GameBoardRefreshedAction> {
-  return dispatch => {
-    axios.get('/api/game-board')
-      .then(
-        (success: { data: GameBoard }) => dispatch(commentsRefreshed(success.data)),
+        (success: { data: GameBoard }) => dispatch(gameBoardCreated(success.data)),
         // TODO: something more helpful with this failure
         failure => console.log(failure)
       );

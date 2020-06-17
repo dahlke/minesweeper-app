@@ -42,16 +42,11 @@ public class GameBoardResource {
 	private int port = 3000;
 	private final ObjectMapper objectMapper = new ObjectMapper();
 
-	@RequestMapping(path = "/game", method = POST)
+	// TODO: update all the other methods to take JSOn instead.
+	@RequestMapping(path = "/game", method = POST, consumes = "application/json", produces = "application/json")
 	@ResponseBody
-	//consumes = "application/json", produces = "application/json"
-	public String game(
-		@RequestParam(name="name", defaultValue="test", required=false) String name,
-		@RequestParam(name="rows", defaultValue="10", required=false) Integer rows,
-		@RequestParam(name="cols", defaultValue="10", required=false) Integer cols,
-		@RequestParam(name="mines", defaultValue="20", required=false) Integer mines
-	) throws IOException {
-		// curl -i -X POST '127.0.0.1:8080/api/game' -d name=test -d rows=10 -d cols=10 -d mines=20
+	public String game(@RequestBody GameBoard gameBoard) throws IOException {
+		// curl -i -H 'Content-Type: application/json' -X POST '127.0.0.1:8080/api/game' -d '{"name": "testeeeed", "rows": 10, "cols": 8, "mines": 20}'
 
 		RestTemplate restTemplate = new RestTemplate();
 		String gameUrl = "http://localhost:3000/game";
@@ -60,11 +55,10 @@ public class GameBoardResource {
 		headers.setContentType(APPLICATION_JSON);
 
 		JSONObject gameRequestJson = new JSONObject();
-		gameRequestJson.put("name", name);
-		gameRequestJson.put("rows", rows);
-		gameRequestJson.put("cols", cols);
-		gameRequestJson.put("mines", mines);
-
+		gameRequestJson.put("name", gameBoard.getName());
+		gameRequestJson.put("rows", gameBoard.getRows());
+		gameRequestJson.put("cols", gameBoard.getCols());
+		gameRequestJson.put("mines", gameBoard.getMines());
 
 		HttpEntity<String> request = new HttpEntity<String>(gameRequestJson.toString(), headers);
 		String gameBoardAsString = restTemplate.postForObject(gameUrl, request, String.class);

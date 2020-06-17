@@ -124,6 +124,7 @@ curl -i -X POST '127.0.0.1:3000/game/teste/click' -d '{"row": 1,"col":1}'
 ```
 
 ```
+curl -i -H 'Content-Type: application/json' -X POST '127.0.0.1:8080/api/game' -d '{"name": "teste", "rows": 10, "cols": 8, "mines": 20}'
 curl -i -X POST '127.0.0.1:8080/api/game' -d name=fub -d rows=10 -d cols=10 -d mines=20
 curl -i -X POST '127.0.0.1:8080/api/start' -d name=fub
 curl -i -X POST '127.0.0.1:8080/api/click' -d name=fub -d x=1 -d y=1
