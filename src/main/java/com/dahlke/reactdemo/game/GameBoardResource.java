@@ -42,11 +42,10 @@ public class GameBoardResource {
 	private int port = 3000;
 	private final ObjectMapper objectMapper = new ObjectMapper();
 
-	// TODO: update all the other methods to take JSOn instead.
 	@RequestMapping(path = "/game", method = POST, consumes = "application/json", produces = "application/json")
 	@ResponseBody
 	public String game(@RequestBody GameBoard gameBoard) throws IOException {
-		// curl -i -H 'Content-Type: application/json' -X POST '127.0.0.1:8080/api/game' -d '{"name": "testeeeed", "rows": 10, "cols": 8, "mines": 20}'
+		// curl -i -H 'Content-Type: application/json' -X POST '127.0.0.1:8080/api/game' -d '{"name": "neilneilneil", "rows": 10, "cols": 8, "mines": 20}'
 
 		RestTemplate restTemplate = new RestTemplate();
 		String createGameUrl = "http://localhost:3000/game";
@@ -72,31 +71,23 @@ public class GameBoardResource {
 		return result.toString();
 	}
 
-	@RequestMapping(path = "/click", method = POST)
+	@RequestMapping(path = "/click", method = POST, consumes = "application/json", produces = "application/json")
 	@ResponseBody
-	//consumes = "application/json", produces = "application/json"
-	public String game(
-		@RequestParam(name="name") String name,
-		@RequestParam(name="x") Integer x,
-		@RequestParam(name="y") Integer y
-	) throws IOException {
-		// curl -i -X POST '127.0.0.1:8080/api/click' -d name=test -d x=10 -d y=10
+	public String game(@RequestBody GameClick gameClick) throws IOException {
+		// curl -i -H 'Content-Type: application/json' -X POST '127.0.0.1:8080/api/click' -d '{"name": "neilneilneil", "row": 1, "col": 1}'
 
 		RestTemplate restTemplate = new RestTemplate();
-		String gameUrl = String.format("http://localhost:3000/game/%s/click", name);
-		System.out.println(gameUrl);
+		String gameClickUrl = String.format("http://localhost:3000/game/%s/click", gameClick.getName());
 
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(APPLICATION_JSON);
 
-		JSONObject gameRequestJson = new JSONObject();
-		gameRequestJson.put("col", x);
-		gameRequestJson.put("row", y);
+		JSONObject gameClickJson = new JSONObject();
+		gameClickJson.put("row", gameClick.getRow());
+		gameClickJson.put("col", gameClick.getCol());
 
-
-		System.out.println(gameUrl);
-		HttpEntity<String> request = new HttpEntity<String>(gameRequestJson.toString(), headers);
-		String gameBoardAsString = restTemplate.postForObject(gameUrl, request, String.class);
+		HttpEntity<String> gameClickRequest = new HttpEntity<String>(gameClickJson.toString(), headers);
+		String gameBoardAsString = restTemplate.postForObject(gameClickUrl, gameClickRequest, String.class);
 		JsonNode root = objectMapper.readTree(gameBoardAsString);
 		JsonNode result = root.path("result");
 		return result.toString();
