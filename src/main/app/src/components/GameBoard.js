@@ -2,14 +2,16 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import { createGameBoard } from '../data/modules/game';
+import { createGameBoard, clickGameCell } from '../data/modules/game';
 import type { GameBoard as GameBoardType } from '../data/modules/game';
 import './GameBoard.less';
 
 type Props = {
   status: String,
   gameBoard: GameBoardType,
-  createGameBoard: () => void
+  gameBoardLatestData: Map,
+  createGameBoard: () => void,
+  clickGameCell: () => void
 };
 
 class GameBoard extends React.Component<Props> {
@@ -29,18 +31,19 @@ class GameBoard extends React.Component<Props> {
     this.handleColsChange = this.handleColsChange.bind(this);
     this.handleMinesChange = this.handleMinesChange.bind(this);
     this.handleCreateGameBoard = this.handleCreateGameBoard.bind(this);
+    this.clickCell = this.clickCell.bind(this);
 
   }
 
-  _clickCell(e, data) {
-      const row = e.currentTarget.dataset.row;
-      const col = e.currentTarget.dataset.col;
-      console.log(row, col);
+  clickCell(event, data) {
+      const row = event.currentTarget.dataset.row;
+      const col = event.currentTarget.dataset.col;
+      this.props.clickGameCell(this.props.gameBoard.name, row, col);
   }
 
   _getGameBoardRows() {
     const rows = [];
-    console.log("build board", this.props);
+    console.log("build board", this.props.gameBoard, this.props.gameBoardLatestData);
     if (this.props.gameBoard) {
       const height = this.props.gameBoard.rows;
       const width = this.props.gameBoard.cols;
@@ -51,7 +54,7 @@ class GameBoard extends React.Component<Props> {
         const cols = [];
         for (j = 0; j < width; j++) {
           
-          cols.push(<div className="game-cell" data-col={j} data-row={i} key={`cell-${i}-${j}`} onClick={this._clickCell} />)
+          cols.push(<div className="game-cell" data-col={j} data-row={i} key={`cell-${i}-${j}`} onClick={this.clickCell} />)
         }
         rows.push(
           <div key={`row-${i}`} className="game-row">
@@ -82,13 +85,12 @@ class GameBoard extends React.Component<Props> {
 
   handleCreateGameBoard(event) {
     event.preventDefault();
-    console.log("handle create game board", this.props);
     this.props.createGameBoard(this.state.inputName, this.state.inputMines, this.state.inputCols, this.state.inputMines);
   }
 
   render() {
     const rows = this._getGameBoardRows();
-    console.log("render");
+
     return (
       <div key="game-board" className="game-board">
         {rows}
@@ -117,9 +119,11 @@ class GameBoard extends React.Component<Props> {
 }
 
 function mapStateToProps(state) {
+  console.log(state.game.gameBoardLatestData);
   return {
-    gameBoard: state.game.gameBoard
+    gameBoard: state.game.gameBoard,
+    gameBoardLatestData: state.game.gameBoardLatestData
   };
 }
 
-export default connect(mapStateToProps, { createGameBoard })(GameBoard);
+export default connect(mapStateToProps, { createGameBoard, clickGameCell })(GameBoard);
