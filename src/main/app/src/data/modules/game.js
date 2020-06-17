@@ -12,12 +12,12 @@ export type GameBoard = {
 };
 
 type State = {
-  status: 'new' | 'started' | 'over',
+  status: 'started' | 'over',
   gameBoard: GameBoard
 }
 
 type GameBoardCreatedAction = {
-  type: 'GAME_BOARD_CREATED', payload: Comment[]
+  type: 'GAME_BOARD_CREATED', payload: GameBoard
 };
 
 type Action = GameBoardCreatedAction;
@@ -27,17 +27,12 @@ const defaultState : State = {
   data: []
 };
 
-/*
-curl -i -X POST '127.0.0.1:8080/api/game' -d name=fub -d rows=10 -d cols=10 -d mines=20
-curl -i -X POST '127.0.0.1:8080/api/start' -d name=fub
-curl -i -X POST '127.0.0.1:8080/api/click' -d name=fub -d x=1 -d y=1
-*/
-
 export default function reducer(state : State = defaultState, action : Action) : State {
+  console.log("reduced", action)
   switch (action.type) {
     case 'GAME_BOARD_CREATED':
       return {
-        status: 'new',
+        status: 'started',
         gameBoard: action.payload
       };
 
@@ -47,7 +42,6 @@ export default function reducer(state : State = defaultState, action : Action) :
 }
 
 export function gameBoardCreated(gameBoard : GameBoard) : GameBoardCreatedAction {
-  console.log("game board created", gameBoard);
   return {
     type: 'GAME_BOARD_CREATED',
     payload: gameBoard
@@ -61,7 +55,6 @@ export function createGameBoard(inputName, inputRows, inputCols, inputMines) : T
     cols: inputCols, 
     mines: inputMines 
   }
-  console.log("axios create game board", params);
 
   return dispatch => {
       axios.post('/api/game', params)

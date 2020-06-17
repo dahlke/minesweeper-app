@@ -33,32 +33,32 @@ class GameBoard extends React.Component<Props> {
   }
 
   _clickCell(e, data) {
-      const x = e.currentTarget.dataset.x
-      const y = e.currentTarget.dataset.y
+      const row = e.currentTarget.dataset.row;
+      const col = e.currentTarget.dataset.col;
+      console.log(row, col);
   }
 
   _getGameBoardRows() {
-
-    let gameBoardSpec = {"success":true,"status":201,"result":{"name":"teste","rows":10,"cols":8,"mines":20,"status":"new"}}
-    // let samplePlayResp = {"success":true,"status":200,"result":{"Cell":{"mine":true,"clicked":true,"value":1},"Game":{"name":"teste","rows":10,"cols":8,"mines":20,"status":"over","grid":[[{"mine":false,"clicked":false,"value":1},{"mine":false,"clicked":false,"value":2},{"mine":true,"clicked":false,"value":2},{"mine":false,"clicked":false,"value":3},{"mine":true,"clicked":false,"value":1},{"mine":false,"clicked":false,"value":1},{"mine":false,"clicked":false,"value":0},{"mine":false,"clicked":false,"value":0}],[{"mine":false,"clicked":false,"value":1},{"mine":true,"clicked":true,"value":1},{"mine":false,"clicked":false,"value":3},{"mine":true,"clicked":false,"value":2},{"mine":false,"clicked":false,"value":2},{"mine":false,"clicked":false,"value":1},{"mine":false,"clicked":false,"value":0},{"mine":false,"clicked":false,"value":0}],[{"mine":false,"clicked":false,"value":1},{"mine":false,"clicked":false,"value":1},{"mine":false,"clicked":false,"value":3},{"mine":false,"clicked":false,"value":2},{"mine":false,"clicked":false,"value":2},{"mine":false,"clicked":false,"value":0},{"mine":false,"clicked":false,"value":0},{"mine":false,"clicked":false,"value":0}],[{"mine":false,"clicked":false,"value":1},{"mine":false,"clicked":false,"value":1},{"mine":false,"clicked":false,"value":2},{"mine":true,"clicked":false,"value":1},{"mine":false,"clicked":false,"value":2},{"mine":false,"clicked":false,"value":0},{"mine":false,"clicked":false,"value":0},{"mine":false,"clicked":false,"value":0}],[{"mine":true,"clicked":false,"value":1},{"mine":false,"clicked":false,"value":2},{"mine":false,"clicked":false,"value":4},{"mine":true,"clicked":false,"value":2},{"mine":false,"clicked":false,"value":3},{"mine":false,"clicked":false,"value":1},{"mine":false,"clicked":false,"value":1},{"mine":false,"clicked":false,"value":1}],[{"mine":false,"clicked":false,"value":3},{"mine":true,"clicked":false,"value":2},{"mine":false,"clicked":false,"value":3},{"mine":true,"clicked":false,"value":1},{"mine":false,"clicked":false,"value":2},{"mine":false,"clicked":false,"value":1},{"mine":true,"clicked":false,"value":0},{"mine":false,"clicked":false,"value":1}],[{"mine":true,"clicked":false,"value":2},{"mine":false,"clicked":false,"value":4},{"mine":false,"clicked":false,"value":3},{"mine":false,"clicked":false,"value":2},{"mine":false,"clicked":false,"value":2},{"mine":false,"clicked":false,"value":2},{"mine":false,"clicked":false,"value":3},{"mine":false,"clicked":false,"value":2}],[{"mine":true,"clicked":false,"value":2},{"mine":false,"clicked":false,"value":4},{"mine":true,"clicked":false,"value":1},{"mine":false,"clicked":false,"value":2},{"mine":false,"clicked":false,"value":2},{"mine":true,"clicked":false,"value":1},{"mine":false,"clicked":false,"value":3},{"mine":true,"clicked":false,"value":1}],[{"mine":true,"clicked":false,"value":1},{"mine":false,"clicked":false,"value":3},{"mine":false,"clicked":false,"value":2},{"mine":true,"clicked":false,"value":2},{"mine":false,"clicked":false,"value":3},{"mine":false,"clicked":false,"value":4},{"mine":true,"clicked":false,"value":3},{"mine":false,"clicked":false,"value":3}],[{"mine":false,"clicked":false,"value":1},{"mine":false,"clicked":false,"value":1},{"mine":false,"clicked":false,"value":1},{"mine":false,"clicked":false,"value":2},{"mine":true,"clicked":false,"value":1},{"mine":false,"clicked":false,"value":3},{"mine":true,"clicked":false,"value":1},{"mine":false,"clicked":false,"value":2}]]}}}
-
-    const height = gameBoardSpec["result"]["rows"];
-    const width = gameBoardSpec["result"]["cols"];
     const rows = [];
+    console.log("build board", this.props);
+    if (this.props.gameBoard) {
+      const height = this.props.gameBoard.rows;
+      const width = this.props.gameBoard.cols;
 
-    var i;
-    for (i = 0; i < height; i++) {
-      var j;
-      const cols = [];
-      for (j = 0; j < width; j++) {
-        
-        cols.push(<div className="game-cell" data-x={j} data-y={i} key={`cell-${i}-${j}`} onClick={this._clickCell} />)
+      var i;
+      for (i = 0; i < height; i++) {
+        var j;
+        const cols = [];
+        for (j = 0; j < width; j++) {
+          
+          cols.push(<div className="game-cell" data-col={j} data-row={i} key={`cell-${i}-${j}`} onClick={this._clickCell} />)
+        }
+        rows.push(
+          <div key={`row-${i}`} className="game-row">
+            {cols}
+          </div>
+        );
       }
-      rows.push(
-        <div key={`row-${i}`} className="game-row">
-          {cols}
-        </div>
-      );
     }
 
     return rows;
@@ -88,7 +88,7 @@ class GameBoard extends React.Component<Props> {
 
   render() {
     const rows = this._getGameBoardRows();
-    console.log(this.state);
+    console.log("render");
     return (
       <div key="game-board" className="game-board">
         {rows}
@@ -118,6 +118,7 @@ class GameBoard extends React.Component<Props> {
 
 function mapStateToProps(state) {
   return {
+    gameBoard: state.game.gameBoard
   };
 }
 
