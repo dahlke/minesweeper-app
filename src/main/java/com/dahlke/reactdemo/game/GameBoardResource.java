@@ -49,41 +49,26 @@ public class GameBoardResource {
 		// curl -i -H 'Content-Type: application/json' -X POST '127.0.0.1:8080/api/game' -d '{"name": "testeeeed", "rows": 10, "cols": 8, "mines": 20}'
 
 		RestTemplate restTemplate = new RestTemplate();
-		String gameUrl = "http://localhost:3000/game";
+		String createGameUrl = "http://localhost:3000/game";
 
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(APPLICATION_JSON);
 
-		JSONObject gameRequestJson = new JSONObject();
-		gameRequestJson.put("name", gameBoard.getName());
-		gameRequestJson.put("rows", gameBoard.getRows());
-		gameRequestJson.put("cols", gameBoard.getCols());
-		gameRequestJson.put("mines", gameBoard.getMines());
+		JSONObject createGameJson = new JSONObject();
+		createGameJson.put("name", gameBoard.getName());
+		createGameJson.put("rows", gameBoard.getRows());
+		createGameJson.put("cols", gameBoard.getCols());
+		createGameJson.put("mines", gameBoard.getMines());
 
-		HttpEntity<String> request = new HttpEntity<String>(gameRequestJson.toString(), headers);
-		String gameBoardAsString = restTemplate.postForObject(gameUrl, request, String.class);
+		HttpEntity<String> createGameRequest = new HttpEntity<String>(createGameJson.toString(), headers);
+		restTemplate.postForObject(createGameUrl, createGameRequest, String.class);
+
+		String startGameUrl = String.format("http://localhost:3000/game/%s/start", gameBoard.getName());
+		HttpEntity<String> startGameRequest = new HttpEntity<String>(null, headers);
+		String gameBoardAsString = restTemplate.postForObject(startGameUrl, startGameRequest, String.class);
 		JsonNode root = objectMapper.readTree(gameBoardAsString);
 		JsonNode result = root.path("result");
-		return result.toString();
-	}
 
-	@RequestMapping(path = "/start", method = POST)
-	@ResponseBody
-	//consumes = "application/json", produces = "application/json"
-	public String start(@RequestParam(name="name") String name) throws IOException {
-		// curl -i -X POST '127.0.0.1:8080/api/start' -d name=test
-
-		RestTemplate restTemplate = new RestTemplate();
-		String gameUrl = String.format("http://localhost:3000/game/%s/start", name);
-
-		HttpHeaders headers = new HttpHeaders();
-		headers.setContentType(APPLICATION_JSON);
-		System.out.println(gameUrl);
-
-		HttpEntity<String> request = new HttpEntity<String>(null, headers);
-		String gameBoardAsString = restTemplate.postForObject(gameUrl, request, String.class);
-		JsonNode root = objectMapper.readTree(gameBoardAsString);
-		JsonNode result = root.path("result");
 		return result.toString();
 	}
 
