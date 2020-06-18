@@ -54,7 +54,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
-		// TODO: remove all the comment stuff once I have all the minesweeper stuff working.
 		http
 			.csrf().disable()
 			.authorizeRequests()
