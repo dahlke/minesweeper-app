@@ -10,10 +10,10 @@ import Helmet from 'react-helmet';
 const AppMeta = () => (
   <Helmet
     htmlAttributes={{ lang: 'en' }}
-    titleTemplate="Spring React Boilerplate - %s"
-    defaultTitle="Spring React Boilerplate"
+    titleTemplate="HashiCorp Nomad Demo - %s"
+    defaultTitle="HashiCorp Nomad Demo"
     meta={[
-      { name: 'description', content: 'Spring React Boilerplate' },
+      { name: 'description', content: 'HashiCorp Nomad Demo' },
       { property: 'og:type', content: 'article' },
       { 'http-equiv': 'X-UA-Compatible', content: 'IE=edge' },
       { name: 'viewport', content: 'width=device-width, initial-scale=1' }

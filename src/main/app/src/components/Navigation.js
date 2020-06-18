@@ -44,7 +44,7 @@ class Navigation extends React.Component<Props> {
               <span className="icon-bar" />
               <span className="icon-bar" />
             </button>
-            <Link to="/" className="navbar-brand"><img className="logo" src="/static/hashicorp.svg" /></Link>
+            <Link to="/" className="navbar-brand"><img className="logo" alt="HashiCorp Logo" src="/static/hashicorp.svg" /></Link>
           </div>
         </div>
       </nav>
