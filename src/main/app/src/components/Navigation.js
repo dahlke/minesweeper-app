@@ -3,6 +3,7 @@ import React from 'react';
 import { Link, withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import axios from 'axios';
+import './Navigation.less';
 
 import { logout } from '../data/modules/auth';
 
@@ -43,7 +44,7 @@ class Navigation extends React.Component<Props> {
               <span className="icon-bar" />
               <span className="icon-bar" />
             </button>
-            <Link to="/" className="navbar-brand">HashiCorp Nomad - Minesweeper</Link>
+            <Link to="/" className="navbar-brand"><img className="logo" src="/static/hashicorp.svg" /></Link>
           </div>
         </div>
       </nav>

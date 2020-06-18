@@ -22,10 +22,10 @@ class GameBoard extends React.Component<Props> {
 
     this.state = {
       inputRows: 10, 
-      inputCols: 10, 
-      inputMines: 20,
+      inputCols: 20, 
+      inputMines: 40,
       localGameBoard: [],
-      gameStatus: "playing"
+      gameStatus: "pending"
     };
 
     this.handleRowsChange = this.handleRowsChange.bind(this);
@@ -40,6 +40,7 @@ class GameBoard extends React.Component<Props> {
     // different names signalling a new game, then compute the local game board data.
     if ((!prevProps.gameBoard && this.props.gameBoard) || (prevProps.gameBoard && this.props.gameBoard.name !== prevProps.gameBoard.name)) {
       // TODO: if it's a new game, the local board
+      console.log("New game!")
       this._computeLocalGameBoardData()
     }
 
@@ -76,6 +77,7 @@ class GameBoard extends React.Component<Props> {
     }
 
     this.setState({
+      gameStatus: "playing",
       localGameBoard: rows
     });
   }
@@ -89,7 +91,6 @@ class GameBoard extends React.Component<Props> {
       localGameBoard[this.props.lastClicked.row][this.props.lastClicked.col] = this.props.gameBoardLatestData.Cell;
 
       if (this.props.gameBoardLatestData.Cell.mine) {
-        console.log("HIT THE MINE!", this.props.gameBoardLatestData.Game.grid)
         localGameBoard = this.props.gameBoardLatestData.Game.grid;
         gameStatus = "over";
       }
@@ -105,7 +106,8 @@ class GameBoard extends React.Component<Props> {
     const rows = [];
 
     if (this.props.gameBoard && this.state.localGameBoard.length > 0) {
-      // TODO: manage changes
+      // TODO: manage changes to board
+      // TODO: set a max col number (25)
       const height = this.props.gameBoard.rows;
       const width = this.props.gameBoard.cols;
       const isGameOver = this.state.gameStatus === "over";
@@ -121,7 +123,7 @@ class GameBoard extends React.Component<Props> {
           const cellValue = isClicked || isGameOver ? (isMine ? "*" : cellData.value) : "";
 
           cols.push(
-            <div className={`game-cell ${isClicked ? "clicked" : "" } `} data-col={col} data-row={row} key={`cell-${row}-${col}`} onClick={this.clickCell}>
+            <div className={`game-cell ${isClicked ? "clicked" : "" } ${isGameOver ? "gameover" : ""} ${isMine ? "mine" : ""}`} data-col={col} data-row={row} key={`cell-${row}-${col}`} onClick={this.clickCell}>
               <span>
                 {cellValue}
               </span>
@@ -158,25 +160,28 @@ class GameBoard extends React.Component<Props> {
 
   render() {
     const rows = this._getGameBoardRows();
-
-    return (
-      <div key="game-board" className="game-board">
-        {rows}
+    const createForm = this.state.gameStatus === "pending" ? (
         <form onSubmit={this.handleCreateGameBoard}>
             <label>
-              Rows:
+              <span>Rows:</span>
               <input type="text" value={this.state.inputRows} onChange={this.handleRowsChange} />
             </label>
             <label>
-              Cols:
+              <span>Cols:</span>
               <input type="text" value={this.state.inputCols} onChange={this.handleColsChange} />
             </label>
             <label>
-              Mines:
+              <span>Mines:</span>
               <input type="text" value={this.state.inputMines} onChange={this.handleMinesChange} />
             </label>
             <input type="submit" value="Create Game" />
           </form>
+    ) : null;
+
+    return (
+      <div key="game-board" className="game-board">
+        {rows}
+        {createForm}
         </div>
     );
   }

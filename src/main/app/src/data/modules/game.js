@@ -5,7 +5,6 @@ import type { Thunk } from '../';
 
 export type GameBoard = {
   name: string,
-  status: string,
   rows: int,
   cols: int,
   mines: int
@@ -19,7 +18,6 @@ export type GameCellClickResp = {
   },
   game: {
     name: string,
-    status: string,
     rows: int,
     cols: int,
     mines: int,
@@ -32,7 +30,6 @@ export type GameCellClickResp = {
 
 
 type State = {
-  status: 'new' | 'playing' | 'pending' | 'over',
   gameBoard: GameBoard,
   gameBoardLatestData: {},
   lastClicked: {}
@@ -49,7 +46,6 @@ type GameCellClickedAction = {
 type Action = GameBoardCreatedAction | GameCellClickedAction;
 
 const defaultState : State = {
-  status: 'pending',
   data: []
 };
 
@@ -57,7 +53,6 @@ export default function reducer(state : State = defaultState, action : Action) :
   switch (action.type) {
     case 'GAME_BOARD_CREATED':
       return {
-        status: 'new',
         gameBoard: action.payload
       };
 
@@ -106,9 +101,6 @@ export function createGameBoard(inputRows, inputCols, inputMines) : Thunk<GameBo
 
 // Game Cell Click Functions
 export function gameCellClicked(gameCellClickResp: GameCellClickResp, row: int, col: int) : GameCellClickedAction {
-  if (gameCellClickResp.Cell.mine) {
-    console.log("GAME_CELL_CLICKED", gameCellClickResp.Game.grid)
-  }
   return {
     type: 'GAME_CELL_CLICKED',
     payload: gameCellClickResp,

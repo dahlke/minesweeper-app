@@ -1,3 +1,5 @@
+// Nomad Green: #00BC7F
+
 .game-board {
 	display: block;
 	width: 50%;
@@ -10,21 +12,53 @@
 		.game-cell {
 			display: inline-block;
 			float: left;
-			border: 1px solid #000;
+			border: 1px solid #ccc;
 			padding: 1px;
 			width: 25px;
 			height: 25px;
 			text-align: center;
+			background: #00BC7F;
+			background-image: url(/static/nomad.svg);
+			background-position: center;
+			background-repeat: no-repeat;
+			background-repeat: no-repeat;
+			background-size: cover;
+			background-position-y: 0px;
+
+			&:hover {
+				border-color: red;
+			}
 
 			&.clicked {
-				background: #777;
+				background: #eee;
+				border-color: red;
+			}
+
+
+			&.gameover {
+				background: #eee;
+			}
+
+			&.clicked.mine.gameover {
+				background-color: red;
+				color: #fff;
 			}
 		}
 	}
 
 	form {
 		label {
-			width: 100%;
+			width: 100px;
+
+			span {
+				display: inline-block;
+				width: 50px;
+				margin-right: 5px;
+			}
+
+			input {
+				width: 50px;
+			}
 		}
 	}
 }
