@@ -1,10 +1,10 @@
-# spring-react-boilerplate
+# minesweeper-app
 
 ```
 mvn
 yarn start
 mvn package
-java -jar target/spring-react-boilerplate-1.0.0-SNAPSHOT.jar
+java -jar target/minesweeper-app-1.0.0-SNAPSHOT.jar
 ```
 
 ```

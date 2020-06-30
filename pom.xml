@@ -4,11 +4,11 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>com.dahlke.reactdemo</groupId>
-	<artifactId>spring-react-boilerplate</artifactId>
+	<artifactId>minesweeper-app</artifactId>
 	<version>1.0.0-SNAPSHOT</version>
 	<packaging>jar</packaging>
 
-	<name>minesweeper-frontend-java</name>
+	<name>minesweeper-app-java</name>
 	<description>HashiCorp Nomad demo component.</description>
 
 	<parent>
